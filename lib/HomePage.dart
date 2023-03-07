@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import 'misc.dart';
+import 'package:mainproject/CalendarPage.dart';
+import 'package:mainproject/login.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -45,9 +45,11 @@ class _HomePageState extends State<HomePage> {
     int monthnum = month - 1;
     String year = date.year.toString();
     String CurrentTime = DateFormat('hh:mm a').format(DateTime.now());
+    User? user = FirebaseAuth.instance.currentUser;
+    String? username = user?.displayName;
     return Scaffold(
-      bottomNavigationBar: Container(
-          color: const Color(0xff2A4666),
+      bottomNavigationBar: Container(height: 40,
+          color:  Color(0xff1D3654),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -62,43 +64,45 @@ class _HomePageState extends State<HomePage> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(image: isDark ? firstImage : secondImage),
         child: Column(children: [
-          SizedBox(
+          FloatingActionButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));}),
+          const SizedBox(
             height: 90,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                  margin: EdgeInsets.only(left: 20, right: 150),
-                  alignment: Alignment.center,
-                  child: Text("Welcome, Lino",
-                      style: TextStyle(
-                          fontSize: 36, fontWeight: FontWeight.bold))),
-              SizedBox(height: 13),
-              Container(
-                margin: EdgeInsets.only(left: 20),
-                child: Text("$day ${months[monthnum]} ,$year",
-                    style: TextStyle(fontSize: 20)),
-              )
-            ],
+          Container(
+            margin: EdgeInsets.only(left: 40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                    alignment: Alignment.topLeft,
+                    child:  const Text("Welcome,",
+                        style: TextStyle(
+                            fontSize: 36, fontWeight: FontWeight.bold))),
+                const SizedBox(height: 13),
+                Container(
+                  child: Text("$day ${months[monthnum]} ,$year",
+                      style: const TextStyle(fontSize: 20)),
+                )
+              ],
+            ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 35,
           ),
           //seearch box
           Center(
             child: Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    color: Color(0xffD9D9D9).withOpacity(0.4),
+                    color: const Color(0xffD9D9D9).withOpacity(0.4),
                     borderRadius: BorderRadius.circular(20)),
                 width: maxWidth / 1.2,
                 child: TextFormField(
-                  style: TextStyle(fontSize: 20, color: Colors.black45),
+                  style: const TextStyle(fontSize: 20, color: Colors.black45),
                   textAlign: TextAlign.center,
                   decoration: const InputDecoration(
                       hintText: '🔍 search',
@@ -109,29 +113,32 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(
             height: 20,
           ),
-          Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 10, bottom: 10),
-              decoration: BoxDecoration(
-                  color: Color(0xffD9D9D9).withOpacity(0.6),
-                  borderRadius: BorderRadius.circular(20)),
-              width: maxWidth / 1.2,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Image(image: AssetImage('lib/asset/icons/notification.png')),
-                      Text(
-                        '    Activities today   $CurrentTime',
-                        style: const TextStyle(fontSize: 18, color: Colors.black54),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 30,),
-                  Text('No events today'),
-                ],
-              )),
+          InkWell(
+            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => CalenderPage()));},
+            child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                decoration: BoxDecoration(
+                    color: Color(0xffD9D9D9).withOpacity(0.6),
+                    borderRadius: BorderRadius.circular(20)),
+                width: maxWidth / 1.2,
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Image(image: AssetImage('lib/asset/icons/notification.png')),
+                        Text(
+                          '    Activities today   $CurrentTime',
+                          style: const TextStyle(fontSize: 18, color: Colors.black54),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 30,),
+                    const Text('No events today'),
+                  ],
+                )),
+          ),
         ]),
       ),
     );
@@ -149,9 +156,3 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-Widget Frame2() {
-  return CustomPaint(
-    painter: RPSCustomPainter(),
-    child: Container(height: 400, width: 400, child: Text(" ")),
-  );
-}
