@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mainproject/CalendarPage.dart';
 import 'package:mainproject/login.dart';
 
 class HomePage extends StatefulWidget {
@@ -38,8 +37,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     FirebaseAuth _auth = FirebaseAuth.instance;
-    double maxHeight = MediaQuery.of(context).size.height;
-    double maxWidth = MediaQuery.of(context).size.width;
+    double maxHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double maxWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     String day = date.day.toString();
     int month = date.month;
     int monthnum = month - 1;
@@ -49,22 +54,25 @@ class _HomePageState extends State<HomePage> {
     String? username = user?.displayName;
     return Scaffold(
       bottomNavigationBar: Container(height: 40,
-          color:  Color(0xff1D3654),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              bottomnavigationButton('lib/asset/icons/home.png'),
-              bottomnavigationButton('lib/asset/icons/menu.png'),
-              bottomnavigationButton('lib/asset/icons/profile.png')
-            ],
-          )),
+          color: Color(0xff1D3654),
+          child: bottomnavigationButton('lib/asset/icons/menu.png', () {
+            showModalBottomSheet(
+                context: context, builder: (BuildContext context) => Column(children: [Container(height: 200,child: Text("data"))],));
+          })),
       body: Container(
         alignment: Alignment.topLeft,
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
         decoration: BoxDecoration(image: isDark ? firstImage : secondImage),
         child: Column(children: [
-          FloatingActionButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));}),
+          // FloatingActionButton(child: Text("signuot"),onPressed: (){_auth.signOut();Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));}),
+          // FloatingActionButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));}),
           const SizedBox(
             height: 90,
           ),
@@ -76,10 +84,11 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(
                   height: 20,
                 ),
+                FloatingActionButton(onPressed: (){FirebaseAuth.instance.signOut();Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));}),
                 Container(
                     alignment: Alignment.topLeft,
-                    child:  const Text("Welcome,",
-                        style: TextStyle(
+                    child: Text("Welcome, $username",
+                        style: const TextStyle(
                             fontSize: 36, fontWeight: FontWeight.bold))),
                 const SizedBox(height: 13),
                 Container(
@@ -114,7 +123,6 @@ class _HomePageState extends State<HomePage> {
             height: 20,
           ),
           InkWell(
-            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => CalenderPage()));},
             child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -127,10 +135,12 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Image(image: AssetImage('lib/asset/icons/notification.png')),
+                        const Image(image: AssetImage(
+                            'lib/asset/icons/notification.png')),
                         Text(
                           '    Activities today   $CurrentTime',
-                          style: const TextStyle(fontSize: 18, color: Colors.black54),
+                          style: const TextStyle(fontSize: 18, color: Colors
+                              .black54),
                         )
                       ],
                     ),
@@ -144,15 +154,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget bottomnavigationButton(String icon,) {
+  Widget bottomnavigationButton(String icon,  fun) {
     return Container(
         margin: EdgeInsets.only(right: 20),
         child: Container(
             margin: EdgeInsets.only(left: 20),
             child: IconButton(
-              onPressed: (){},
+              onPressed: () => fun,
               icon: Image(image: AssetImage(icon)),
             )));
+  }
+}
+
+class PoppingContainer extends StatelessWidget {
+  const PoppingContainer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(height: 200, child: Text("Data"),);
   }
 }
 

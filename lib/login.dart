@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mainproject/HomePage.dart';
+import 'package:mainproject/homepagenew.dart';
 
 // todo verifiaction for mail id
 // todo password reentering for verification
@@ -131,7 +132,7 @@ class _LoginState extends State<Login> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomePage()));
+                                  builder: (context) => Homepage2()));
                         }
                       },
                       child: const Text(
@@ -196,7 +197,7 @@ class _LoginState extends State<Login> {
           .createUserWithEmailAndPassword(email: email, password: pass);
       User? user = FirebaseAuth.instance.currentUser;
       //todo remove the depricated function below
-      user?.updateProfile(displayName: name);
+      user?.updateDisplayName(name);
     } on FirebaseAuthException catch (e) {
       String toast = e.message.toString();
       Fluttertoast.showToast(msg: toast);
