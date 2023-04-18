@@ -1,158 +1,243 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mainproject/CalendarPage.dart';
-import 'package:mainproject/login.dart';
+import 'package:mainproject/ToDo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomePage> createState() => _Homepage2State();
 }
 
-DecorationImage firstImage = const DecorationImage(
-    fit: BoxFit.fill, image: AssetImage('lib/asset/icons/indark.jpg'));
-DecorationImage secondImage = const DecorationImage(
-    fit: BoxFit.cover, image: AssetImage('lib/asset/icons/inlight.jpg'));
-bool isDark = true;
+class _Homepage2State extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    double maxHeight = MediaQuery.of(context).size.height;
+    double maxWidth = MediaQuery.of(context).size.width;
+    DateTime date = DateTime.now();
+    int month = date.month;
+    int today = date.day;
+    int year = date.year;
+    String CurrentTime = DateFormat('hh:mm a').format(DateTime.now());
+    String Time = "${date.hour} : ${date.minute}";
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    User? user = _auth.currentUser;
+    String? userName = user?.displayName;
 
-class _HomePageState extends State<HomePage> {
-  DateTime date = DateTime.now();
-  List<String> months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
+    return Scaffold(
+        body: Container(
+            height: maxHeight,
+            width: maxWidth,
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                      fit: BoxFit.cover,
+                    image: AssetImage('lib/asset/images/peakpx.jpg'))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                    margin: EdgeInsets.only(top: 100, left: 25),
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Welcome, $userName ",
+                          style: TextStyle(fontSize: 36),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Text("$today, ${months[month - 1]}, $year",
+                            style: const TextStyle(fontSize: 20)),
+                        const SizedBox(height: 20),
+                        //search bar code minimized and created a reusable widget
+                        SearchBar(MediaQuery.of(context).size.width / 1.2),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        EventsCalender(MediaQuery.of(context).size.width / 1.2,
+                            CurrentTime)
+                      ],
+                    )),
+
+                //menubutton with functionality as modalbottomsheet
+                menuButton(),
+              ],
+            )));
+  }
+
+  Container menuButton() {
+    return Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        alignment: Alignment.bottomCenter,
+        child: FloatingActionButton(
+            backgroundColor: const Color(0xff52384F),
+            onPressed: () {
+              showModalBottomSheet(
+                  clipBehavior: Clip.hardEdge,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40)),
+                  backgroundColor: Colors.transparent,
+                  context: context,
+                  builder: (BuildContext context) => BackdropFilter(
+                        filter: ImageFilter.blur(),
+                        child: Container(
+                          height: 350,
+                          width: 200,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Container(
+                            margin: const EdgeInsets.all(30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  children: [
+                                    menuWidget(
+                                        button: IconButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Calendar()));
+                                      },
+                                      icon: const Image(
+                                        image: AssetImage(
+                                            "lib/asset/icons/tasks.png"),
+                                        height: 50,
+                                        color: Colors.white,
+                                      ),
+                                    )),
+                                    const SizedBox(height: 25),
+                                    menuWidget(
+                                      button: IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                            Icons.note_alt_sharp,
+                                            color: Colors.white,
+                                            size: 50,
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.mic,
+                                      color: Colors.white,
+                                      size: 40,
+                                    )),
+                                Column(
+                                  children: [
+                                    menuWidget(button: const Text("")),
+                                    const SizedBox(height: 25),
+                                    menuWidget(button: const Text("")),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ));
+            },
+            child: const Icon(Icons.menu_book)));
+  }
+}
+
+class menuWidget extends StatelessWidget {
+  String data;
+  Icon icons;
+  bool need;
+  String imagePath;
+  Widget button;
+
+  menuWidget({
+    this.need = false,
+    required this.button,
+    this.icons = const Icon(Icons.abc, size: 35),
+    this.data = "Hello String",
+    this.imagePath = "lib/asset/icons/tasks.png",
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    double maxHeight = MediaQuery.of(context).size.height;
-    double maxWidth = MediaQuery.of(context).size.width;
-    String day = date.day.toString();
-    int month = date.month;
-    int monthnum = month - 1;
-    String year = date.year.toString();
-    String CurrentTime = DateFormat('hh:mm a').format(DateTime.now());
-    User? user = FirebaseAuth.instance.currentUser;
-    String? username = user?.displayName;
-    return Scaffold(
-      bottomNavigationBar: Container(height: 40,
-          color:  Color(0xff1D3654),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              bottomnavigationButton('lib/asset/icons/home.png'),
-              bottomnavigationButton('lib/asset/icons/menu.png'),
-              bottomnavigationButton('lib/asset/icons/profile.png')
-            ],
-          )),
-      body: Container(
-        alignment: Alignment.topLeft,
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(image: isDark ? firstImage : secondImage),
-        child: Column(children: [
-          FloatingActionButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));}),
-          const SizedBox(
-            height: 90,
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                    alignment: Alignment.topLeft,
-                    child:  const Text("Welcome,",
-                        style: TextStyle(
-                            fontSize: 36, fontWeight: FontWeight.bold))),
-                const SizedBox(height: 13),
-                Container(
-                  child: Text("$day ${months[monthnum]} ,$year",
-                      style: const TextStyle(fontSize: 20)),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 35,
-          ),
-          //seearch box
-          Center(
-            child: Container(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: const Color(0xffD9D9D9).withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(20)),
-                width: maxWidth / 1.2,
-                child: TextFormField(
-                  style: const TextStyle(fontSize: 20, color: Colors.black45),
-                  textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
-                      hintText: '🔍 search',
-                      hintStyle: TextStyle(fontSize: 25),
-                      border: InputBorder.none),
-                )),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          InkWell(
-            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context) => CalenderPage()));},
-            child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-                decoration: BoxDecoration(
-                    color: Color(0xffD9D9D9).withOpacity(0.6),
-                    borderRadius: BorderRadius.circular(20)),
-                width: maxWidth / 1.2,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Image(image: AssetImage('lib/asset/icons/notification.png')),
-                        Text(
-                          '    Activities today   $CurrentTime',
-                          style: const TextStyle(fontSize: 18, color: Colors.black54),
-                        )
-                      ],
-                    ),
-                    const SizedBox(height: 30,),
-                    const Text('No events today'),
-                  ],
-                )),
-          ),
-        ]),
+    return BackdropFilter(
+      filter: ImageFilter.blur(),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            color: const Color(0xffB6A0BD).withOpacity(0.2)),
+        height: 100,
+        width: 100,
+        child: button,
       ),
     );
   }
-
-  Widget bottomnavigationButton(String icon,) {
-    return Container(
-        margin: EdgeInsets.only(right: 20),
-        child: Container(
-            margin: EdgeInsets.only(left: 20),
-            child: IconButton(
-              onPressed: (){},
-              icon: Image(image: AssetImage(icon)),
-            )));
-  }
 }
 
+Container SearchBar(double widths) {
+  return Container(
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+          color: const Color(0xffD39393).withOpacity(0.4),
+          borderRadius: BorderRadius.circular(20)),
+      width: widths,
+      child: TextFormField(
+        style: const TextStyle(fontSize: 20, color: Colors.black45),
+        textAlign: TextAlign.center,
+        decoration: const InputDecoration(
+            hintText: '🔍 search',
+            hintStyle: TextStyle(fontSize: 25),
+            border: InputBorder.none),
+      ));
+}
+
+Container EventsCalender(double eventWidth, String time) {
+  return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.only(top: 10, bottom: 10),
+      decoration: BoxDecoration(
+          color: Color(0xff8D7C83).withOpacity(0.6),
+          borderRadius: BorderRadius.circular(20)),
+      width: eventWidth,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Image(
+                  image: AssetImage('lib/asset/icons/notification.png')),
+              Text(
+                '    Activities today   $time',
+                style: const TextStyle(fontSize: 18, color: Colors.black54),
+              )
+            ],
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          const Text('No events today'),
+        ],
+      ));
+}

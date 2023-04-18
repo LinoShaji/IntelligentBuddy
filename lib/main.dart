@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'login.dart';
+import 'package:mainproject/calendarpage.dart';
+import 'package:mainproject/coursePage.dart';
+import 'package:mainproject/login.dart';
+import 'package:mainproject/test.dart';
+import 'package:mainproject/test2.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
+      home: CoursePage()
     );
   }
 }

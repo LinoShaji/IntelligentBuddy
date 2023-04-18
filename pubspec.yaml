@@ -44,6 +44,10 @@ dependencies:
   fluttertoast: ^8.2.1
   cloud_firestore: ^4.4.3
   flutter_chatgpt_api: ^1.1.0
+  table_calendar: ^3.0.9
+  firebase_database: ^10.1.0
+  analog_clock: ^0.1.1
+  flutter_gradient_colors: ^2.1.1
 
 dev_dependencies:
   flutter_test:
