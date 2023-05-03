@@ -42,46 +42,48 @@ class _Homepage2State extends State<HomePage> {
     String? userName = user?.displayName;
 
     return Scaffold(
-        body: Container(
-            height: maxHeight,
-            width: maxWidth,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                      fit: BoxFit.cover,
-                    image: AssetImage('lib/asset/images/peakpx.jpg'))),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                    margin: EdgeInsets.only(top: 100, left: 25),
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Welcome, $userName ",
-                          style: TextStyle(fontSize: 36),
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Text("$today, ${months[month - 1]}, $year",
-                            style: const TextStyle(fontSize: 20)),
-                        const SizedBox(height: 20),
-                        //search bar code minimized and created a reusable widget
-                        SearchBar(MediaQuery.of(context).size.width / 1.2),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        EventsCalender(MediaQuery.of(context).size.width / 1.2,
-                            CurrentTime)
-                      ],
-                    )),
+        body: SingleChildScrollView(
+          child: Container(
+              height: maxHeight,
+              width: maxWidth,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                        fit: BoxFit.cover,
+                      image: AssetImage('lib/asset/images/HomeSccreen.jpg'))),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      margin: EdgeInsets.only(top: 100, left: 25),
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Welcome, $userName ",
+                            style: TextStyle(fontSize: 36,color: Colors.white),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Text("$today, ${months[month - 1]}, $year",
+                              style: const TextStyle(fontSize: 20,color: Colors.white)),
+                          const SizedBox(height: 20),
+                          //search bar code minimized and created a reusable widget
+                          SearchBar(MediaQuery.of(context).size.width / 1.2),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          EventsCalender(MediaQuery.of(context).size.width / 1.2,
+                              CurrentTime)
+                        ],
+                      )),
 
-                //menubutton with functionality as modalbottomsheet
-                menuButton(),
-              ],
-            )));
+                  //menubutton with functionality as modalbottomsheet
+                  menuButton(),
+                ],
+              )),
+        ));
   }
 
   Container menuButton() {
@@ -109,7 +111,8 @@ class _Homepage2State extends State<HomePage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Column(
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     menuWidget(
                                         button: IconButton(
@@ -127,7 +130,15 @@ class _Homepage2State extends State<HomePage> {
                                         color: Colors.white,
                                       ),
                                     )),
-                                    const SizedBox(height: 25),
+                                    const SizedBox(width: 25),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.mic,
+                                          color: Colors.white,
+                                          size: 40,
+                                        )),
+                                    const SizedBox(width: 25),
                                     menuWidget(
                                       button: IconButton(
                                           onPressed: () {},
@@ -139,20 +150,6 @@ class _Homepage2State extends State<HomePage> {
                                     ),
                                   ],
                                 ),
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                      Icons.mic,
-                                      color: Colors.white,
-                                      size: 40,
-                                    )),
-                                Column(
-                                  children: [
-                                    menuWidget(button: const Text("")),
-                                    const SizedBox(height: 25),
-                                    menuWidget(button: const Text("")),
-                                  ],
-                                )
                               ],
                             ),
                           ),
@@ -207,7 +204,7 @@ Container SearchBar(double widths) {
         style: const TextStyle(fontSize: 20, color: Colors.black45),
         textAlign: TextAlign.center,
         decoration: const InputDecoration(
-            hintText: '🔍 search',
+            hintText: '🔍 Ask me',
             hintStyle: TextStyle(fontSize: 25),
             border: InputBorder.none),
       ));

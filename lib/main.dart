@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mainproject/HomePage.dart';
 import 'package:mainproject/calendarpage.dart';
 import 'package:mainproject/coursePage.dart';
 import 'package:mainproject/login.dart';
 import 'package:mainproject/test.dart';
-import 'package:mainproject/test2.dart';
+import 'package:mainproject/Subjects.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,9 +25,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
+        fontFamily: 'Titillium',
         primarySwatch: Colors.blue,
       ),
-      home: CoursePage()
+      home: HomePage()
     );
   }
 }

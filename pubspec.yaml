@@ -48,6 +48,7 @@ dependencies:
   firebase_database: ^10.1.0
   analog_clock: ^0.1.1
   flutter_gradient_colors: ^2.1.1
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:
@@ -89,7 +90,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: Titillium
+      fonts:
+        - asset: lib/asset/font/TitilliumWeb-Black.ttf
+        - asset: lib/asset/font/TitilliumWeb-Regular.ttf
+        - asset: lib/asset/font/TitilliumWeb-SemiBold.ttf
+        - asset: lib/asset/font/TitilliumWeb-SemiBoldItalic.ttf
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
