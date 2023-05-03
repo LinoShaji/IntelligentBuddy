@@ -243,6 +243,7 @@ class _LoginState extends State<Login> {
       User? user = FirebaseAuth.instance.currentUser;
       //todo remove the depricated function below
       user?.updateDisplayName(name);
+      user?.updateDisplayName(name);
     } on FirebaseAuthException catch (e) {
       String toast = e.message.toString();
       Fluttertoast.showToast(msg: toast);
